@@ -2,7 +2,7 @@
 
 **Last Updated**: November 9, 2025
 **Repository**: https://github.com/jbandu/nethaji
-**Status**: 🚧 In Development (Phase 1 - Foundation Complete)
+**Status**: 🚧 In Development (Phase 2 - Core API In Progress)
 
 ---
 
@@ -108,23 +108,39 @@ nethaji/
 
 ---
 
+## ✅ Completed (Phase 2 - Student API)
+
+### Student Management API ✓
+**8 endpoints implemented and tested**:
+- `GET /api/v1/students` - List all students (pagination, filters)
+- `GET /api/v1/students/:id` - Get single student
+- `POST /api/v1/students` - Create student (admin only)
+- `PUT /api/v1/students/:id` - Update student
+- `DELETE /api/v1/students/:id` - Deactivate student (soft delete)
+- `GET /api/v1/students/:id/dashboard` - Progress dashboard
+- `GET /api/v1/students/:id/attendance` - Attendance history
+- `GET /api/v1/students/:id/assessments` - Assessment history
+
+**Features**:
+- Role-based access control (admin, teacher permissions)
+- Pagination and filtering (by village, teacher, squad, dropout status)
+- Search by student name
+- Dashboard with stats, attendance rate, activity breakdown
+- Includes related data (teacher, squad, village, parents)
+- Transaction-safe operations
+- Soft delete (marks as dropout, deactivates user account)
+
+**Test Results**: ✅ All endpoints tested and working
+
 ## 🚧 In Progress
 
-None currently - ready to start next phase.
+None currently - ready for next API module.
 
 ---
 
 ## 📋 Pending (Phase 2 - Core API)
 
-### 1. Student Management API
-- [ ] GET /api/v1/students - List all students
-- [ ] GET /api/v1/students/:id - Get student details
-- [ ] POST /api/v1/students - Create student
-- [ ] PUT /api/v1/students/:id - Update student
-- [ ] GET /api/v1/students/:id/progress - Get progress data
-- [ ] GET /api/v1/students/:id/dashboard - Dashboard data
-
-### 2. Teacher Management API
+### 1. Teacher Management API
 - [ ] GET /api/v1/teachers - List all teachers
 - [ ] GET /api/v1/teachers/:id - Get teacher details
 - [ ] POST /api/v1/teachers - Create teacher
@@ -346,8 +362,8 @@ curl http://localhost:3000/api/v1/auth/me \
 
 ## 📊 Progress Summary
 
-- **Overall Progress**: ~30% (Phase 1 Complete)
-- **Backend API**: ~20% (Auth done, CRUD pending)
+- **Overall Progress**: ~40% (Phase 1 Complete, Student API Complete)
+- **Backend API**: ~35% (Auth + Student API done)
 - **Frontend**: 0% (Not started)
 - **Database**: 100% (Complete)
 - **Authentication**: 100% (Complete)
