@@ -1,0 +1,189 @@
+name: Scheduled Tests
+
+on:
+  schedule:
+    # Run tests every day at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  comprehensive-tests:
+    name: Comprehensive Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: nethaji_scheduled
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers and dependencies
+        run: npx playwright install --with-deps
+
+      - name: Setup test database
+        working-directory: apps/backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nethaji_scheduled
+        run: |
+          npx prisma migrate deploy
+          npx prisma generate
+
+      - name: Start backend server
+        working-directory: apps/backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nethaji_scheduled
+          JWT_SECRET: test_jwt_secret_key_for_scheduled
+          PORT: 3000
+          NODE_ENV: test
+        run: |
+          npm run dev &
+          npx wait-on http://localhost:3000/health --timeout 60000
+
+      - name: Start frontend server
+        working-directory: apps/frontend
+        env:
+          VITE_API_URL: http://localhost:3000/api/v1
+        run: |
+          npm run dev &
+          npx wait-on http://localhost:5173 --timeout 60000
+
+      - name: Run all Playwright tests
+        env:
+          API_URL: http://localhost:3000/api/v1
+          BASE_URL: http://localhost:5173
+        run: npm run test:e2e
+
+      - name: Run backend tests
+        working-directory: apps/backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nethaji_scheduled
+          JWT_SECRET: test_jwt_secret_key_for_scheduled
+          NODE_ENV: test
+        run: npm run test:coverage
+
+      - name: Run frontend tests
+        working-directory: apps/frontend
+        run: npm run test
+
+      - name: Upload comprehensive test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: comprehensive-test-report
+          path: |
+            playwright-report/
+            test-results/
+            apps/backend/coverage/
+            apps/frontend/coverage/
+          retention-days: 30
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "Scheduled tests failed! Please check the test results."
+          # Add notification logic here (Slack, email, etc.)
+
+  cross-browser-tests:
+    name: Cross-Browser E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+        device: [Desktop, Mobile]
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: nethaji_browser_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Setup test database
+        working-directory: apps/backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nethaji_browser_test
+        run: |
+          npx prisma migrate deploy
+          npx prisma generate
+
+      - name: Start backend server
+        working-directory: apps/backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nethaji_browser_test
+          JWT_SECRET: test_jwt_secret_key
+          PORT: 3000
+          NODE_ENV: test
+        run: |
+          npm run dev &
+          npx wait-on http://localhost:3000/health --timeout 60000
+
+      - name: Start frontend server
+        working-directory: apps/frontend
+        env:
+          VITE_API_URL: http://localhost:3000/api/v1
+        run: |
+          npm run dev &
+          npx wait-on http://localhost:5173 --timeout 60000
+
+      - name: Run tests on ${{ matrix.browser }} - ${{ matrix.device }}
+        env:
+          API_URL: http://localhost:3000/api/v1
+          BASE_URL: http://localhost:5173
+        run: npx playwright test --project=${{ matrix.browser }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.browser }}-${{ matrix.device }}
+          path: test-results/
+          retention-days: 14

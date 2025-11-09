@@ -10,6 +10,7 @@ import { rateLimit } from 'express-rate-limit';
 import authRoutes from './routes/auth.routes';
 import studentRoutes from './routes/student.routes';
 import teacherRoutes from './routes/teacher.routes';
+import attendanceRoutes from './routes/attendance.routes';
 
 // Load environment variables
 dotenv.config({ path: '../../.env' });
@@ -65,7 +66,7 @@ app.get('/health', (_req: Request, res: Response) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/students', studentRoutes);
 app.use('/api/v1/teachers', teacherRoutes);
-// app.use('/api/v1/attendance', attendanceRoutes);
+app.use('/api/v1/attendance', attendanceRoutes);
 // app.use('/api/v1/incentives', incentiveRoutes);
 
 // Root endpoint
