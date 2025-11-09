@@ -18,7 +18,7 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:report": "playwright show-report",
-    "test:api": "playwright test tests/api",
+    "test:api": "playwright test --config=playwright-api.config.ts",
     "test:pwa": "playwright test tests/pwa",
     "test:all": "npm run test && npm run test:e2e",
     "db:migrate": "npm run db:migrate --workspace=apps/backend",
