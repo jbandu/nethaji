@@ -4,8 +4,9 @@
   "description": "Backend API for Nethaji Empowerment Initiative",
   "main": "dist/index.js",
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "start": "node dist/index.js",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",

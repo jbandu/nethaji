@@ -15,7 +15,14 @@ export function Layout({ children }: LayoutProps) {
     navigate('/login');
   };
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    // Exact match for dashboard
+    if (path === '/dashboard') {
+      return location.pathname === path;
+    }
+    // For other paths, check if current path starts with the nav path
+    return location.pathname.startsWith(path);
+  };
 
   const getNavItems = () => {
     const commonItems = [

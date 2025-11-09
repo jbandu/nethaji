@@ -53,7 +53,9 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nethaji_test
           JWT_SECRET: test_jwt_secret_key_for_ci
           NODE_ENV: test
-        run: npm run test
+        run: |
+          npx prisma generate
+          npm run test
 
       - name: Upload backend test results
         if: always()
@@ -285,7 +287,9 @@ jobs:
 
       - name: Build backend
         working-directory: apps/backend
-        run: npm run build
+        run: |
+          npx prisma generate
+          npm run build
 
       - name: Build frontend
         working-directory: apps/frontend

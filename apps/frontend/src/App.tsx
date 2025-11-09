@@ -2,6 +2,10 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { LoginPage } from '@/pages/Login';
 import { DashboardPage } from '@/pages/Dashboard';
+import { StudentsPage } from '@/pages/Students';
+import { StudentDetailPage } from '@/pages/StudentDetail';
+import { MarkAttendancePage } from '@/pages/MarkAttendance';
+import { BulkAttendancePage } from '@/pages/BulkAttendance';
 
 function App() {
   return (
@@ -20,13 +24,43 @@ function App() {
           }
         />
 
-        {/* Placeholder routes for future pages */}
+        {/* Students Routes */}
         <Route
           path="/students"
           element={
+            <ProtectedRoute allowedRoles={['admin', 'teacher']}>
+              <StudentsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/students/new"
+          element={
             <ProtectedRoute allowedRoles={['admin']}>
               <div className="p-8 text-center">
-                <h1 className="text-2xl font-bold">Students Page</h1>
+                <h1 className="text-2xl font-bold">Add New Student</h1>
+                <p className="mt-2 text-gray-600">Coming soon...</p>
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/students/:id"
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'teacher']}>
+              <StudentDetailPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/students/:id/edit"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <div className="p-8 text-center">
+                <h1 className="text-2xl font-bold">Edit Student</h1>
                 <p className="mt-2 text-gray-600">Coming soon...</p>
               </div>
             </ProtectedRoute>
@@ -45,14 +79,26 @@ function App() {
           }
         />
 
+        {/* Attendance Routes */}
         <Route
           path="/attendance"
+          element={<Navigate to="/attendance/mark" replace />}
+        />
+
+        <Route
+          path="/attendance/mark"
           element={
             <ProtectedRoute allowedRoles={['admin', 'teacher']}>
-              <div className="p-8 text-center">
-                <h1 className="text-2xl font-bold">Attendance Page</h1>
-                <p className="mt-2 text-gray-600">Coming soon...</p>
-              </div>
+              <MarkAttendancePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/attendance/bulk"
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'teacher']}>
+              <BulkAttendancePage />
             </ProtectedRoute>
           }
         />
