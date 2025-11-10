@@ -13,6 +13,8 @@ import teacherRoutes from './routes/teacher.routes';
 import attendanceRoutes from './routes/attendance.routes';
 import assessmentRoutes from './routes/assessment.routes';
 import incentiveRoutes from './routes/incentive.routes';
+import gamificationRoutes from './routes/gamification.routes';
+import analyticsRoutes from './routes/analytics.routes';
 
 // Load environment variables
 dotenv.config({ path: '../../.env' });
@@ -71,6 +73,8 @@ app.use('/api/v1/teachers', teacherRoutes);
 app.use('/api/v1/attendance', attendanceRoutes);
 app.use('/api/v1/assessments', assessmentRoutes);
 app.use('/api/v1/incentives', incentiveRoutes);
+app.use('/api/v1/gamification', gamificationRoutes);
+app.use('/api/v1/analytics', analyticsRoutes);
 
 // Root endpoint
 app.get('/', (_req: Request, res: Response) => {

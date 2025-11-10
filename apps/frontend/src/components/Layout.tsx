@@ -27,6 +27,7 @@ export function Layout({ children }: LayoutProps) {
   const getNavItems = () => {
     const commonItems = [
       { path: '/dashboard', label: 'Dashboard', icon: '📊' },
+      { path: '/leaderboard', label: 'Leaderboard', icon: '🏆' },
     ];
 
     if (user?.role === 'admin') {
@@ -37,6 +38,7 @@ export function Layout({ children }: LayoutProps) {
         { path: '/attendance', label: 'Attendance', icon: '📝' },
         { path: '/assessments', label: 'Assessments', icon: '📈' },
         { path: '/incentives', label: 'Incentives', icon: '💰' },
+        { path: '/analytics', label: 'Analytics', icon: '📉' },
       ];
     }
 

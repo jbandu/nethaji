@@ -6,6 +6,8 @@ import { StudentsPage } from '@/pages/Students';
 import { StudentDetailPage } from '@/pages/StudentDetail';
 import { MarkAttendancePage } from '@/pages/MarkAttendance';
 import { BulkAttendancePage } from '@/pages/BulkAttendance';
+import { LeaderboardPage } from '@/pages/Leaderboard';
+import { AnalyticsPage } from '@/pages/Analytics';
 
 function App() {
   return (
@@ -123,6 +125,26 @@ function App() {
                 <h1 className="text-2xl font-bold">Incentives Page</h1>
                 <p className="mt-2 text-gray-600">Coming soon...</p>
               </div>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Gamification Routes */}
+        <Route
+          path="/leaderboard"
+          element={
+            <ProtectedRoute>
+              <LeaderboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Analytics Routes */}
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AnalyticsPage />
             </ProtectedRoute>
           }
         />
