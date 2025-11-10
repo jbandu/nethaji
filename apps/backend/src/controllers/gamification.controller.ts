@@ -16,7 +16,7 @@ const prisma = new PrismaClient();
  * Get all available badges
  * Access: All authenticated users
  */
-export const getAllBadges = async (req: Request, res: Response) => {
+export const getAllBadges = async (req: Request, res: Response): Promise<void> => {
   try {
     const { type, rarity } = req.query;
 
@@ -51,7 +51,7 @@ export const getAllBadges = async (req: Request, res: Response) => {
  * Get badges earned by a specific student
  * Access: Student (own), Teacher (assigned students), Admin
  */
-export const getStudentBadges = async (req: Request, res: Response) => {
+export const getStudentBadges = async (req: Request, res: Response): Promise<void> => {
   try {
     const { studentId } = req.params;
     const user = (req as any).user;
@@ -118,7 +118,7 @@ export const getStudentBadges = async (req: Request, res: Response) => {
  * Award a badge to a student
  * Access: Teacher, Admin
  */
-export const awardBadge = async (req: Request, res: Response) => {
+export const awardBadge = async (req: Request, res: Response): Promise<void> => {
   try {
     const schema = z.object({
       studentId: z.string().uuid(),
@@ -252,7 +252,7 @@ export const awardBadge = async (req: Request, res: Response) => {
  * Get leaderboard by gamification points
  * Access: All authenticated users
  */
-export const getLeaderboard = async (req: Request, res: Response) => {
+export const getLeaderboard = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
       limit = '50',
@@ -395,7 +395,7 @@ export const getLeaderboard = async (req: Request, res: Response) => {
  * Get active challenges
  * Access: All authenticated users
  */
-export const getActiveChallenges = async (req: Request, res: Response) => {
+export const getActiveChallenges = async (req: Request, res: Response): Promise<void> => {
   try {
     const { type } = req.query;
     const today = new Date();
@@ -431,7 +431,7 @@ export const getActiveChallenges = async (req: Request, res: Response) => {
  * Get student's challenges and their progress
  * Access: Student (own), Teacher (assigned students), Admin
  */
-export const getStudentChallenges = async (req: Request, res: Response) => {
+export const getStudentChallenges = async (req: Request, res: Response): Promise<void> => {
   try {
     const { studentId } = req.params;
     const user = (req as any).user;
@@ -511,7 +511,7 @@ export const getStudentChallenges = async (req: Request, res: Response) => {
  * Enroll student in a challenge
  * Access: Student (self-enrollment), Teacher, Admin
  */
-export const enrollInChallenge = async (req: Request, res: Response) => {
+export const enrollInChallenge = async (req: Request, res: Response): Promise<void> => {
   try {
     const { challengeId } = req.params;
     const schema = z.object({
@@ -613,7 +613,7 @@ export const enrollInChallenge = async (req: Request, res: Response) => {
  * Mark a challenge as complete
  * Access: Teacher, Admin
  */
-export const completeChallenge = async (req: Request, res: Response) => {
+export const completeChallenge = async (req: Request, res: Response): Promise<void> => {
   try {
     const { challengeId } = req.params;
     const schema = z.object({

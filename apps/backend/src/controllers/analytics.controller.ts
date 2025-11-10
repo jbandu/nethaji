@@ -15,7 +15,7 @@ const prisma = new PrismaClient();
  * Get admin dashboard overview with key metrics
  * Access: Admin only
  */
-export const getDashboardOverview = async (req: Request, res: Response) => {
+export const getDashboardOverview = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = (req as any).user;
 
@@ -192,7 +192,7 @@ export const getDashboardOverview = async (req: Request, res: Response) => {
  * Get attendance trends over time
  * Access: Admin, Teacher (own students)
  */
-export const getAttendanceTrends = async (req: Request, res: Response) => {
+export const getAttendanceTrends = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = (req as any).user;
     const {
@@ -311,7 +311,7 @@ export const getAttendanceTrends = async (req: Request, res: Response) => {
  * Identify students at risk of dropping out
  * Access: Admin, Teacher
  */
-export const getDropoutRisk = async (req: Request, res: Response) => {
+export const getDropoutRisk = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = (req as any).user;
     const { villageId, squadId } = req.query;
@@ -477,7 +477,7 @@ export const getDropoutRisk = async (req: Request, res: Response) => {
  * Get budget tracking and financial overview
  * Access: Admin only
  */
-export const getBudgetTracking = async (req: Request, res: Response) => {
+export const getBudgetTracking = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = (req as any).user;
 
@@ -649,7 +649,7 @@ export const getBudgetTracking = async (req: Request, res: Response) => {
  * Get overall program performance metrics
  * Access: Admin only
  */
-export const getPerformanceMetrics = async (req: Request, res: Response) => {
+export const getPerformanceMetrics = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = (req as any).user;
 
